@@ -1,47 +1,16 @@
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react";
 
-import { twMerge } from "tailwind-merge"
+type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: "solid" | "outline";
+};
 
-const button = cva(
-  [
-    "justify-center",
-    "inline-flex",
-    "items-center",
-    "rounded-xl",
-    "text-center",
-    "border",
-    "border-blue-400",
-    "transition-colors",
-    "delay-50",
-  ],
-  {
-    variants: {
-      intent: {
-        primary: ["bg-blue-400", "text-white", "hover:enabled:bg-blue-700"],
-        secondary: ["bg-transparent", "text-blue-400", "hover:enabled:bg-blue-400", "hover:enabled:text-white"],
-      },
-      size: {
-        sm: ["min-w-20", "h-full", "min-h-10", "text-sm", "py-1.5", "px-4"],
-        lg: ["min-w-32", "h-full", "min-h-12", "text-lg", "py-2.5", "px-6"],
-      },
-      underline: { true: ["underline"], false: [] },
-    },
-    defaultVariants: {
-      intent: "primary",
-      size: "lg",
-    },
-  }
-)
-
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLAnchorElement>, VariantProps<typeof button> {
-  underline?: boolean
-  href: string
+export function Button({ variant = "solid", className = "", ...props }: Props) {
+  const base =
+    "inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-red-500";
+  const styles =
+    variant === "outline"
+      ? "border border-white/20 bg-white/5 text-white hover:bg-white/10"
+      : "bg-red-500 hover:bg-red-400 text-white";
+  return <button className={`${base} ${styles} ${className}`} {...props} />;
 }
-
-export function Button({ className, intent, size, underline, ...props }: ButtonProps) {
-  return (
-    <a className={twMerge(button({ intent, size, className, underline }))} {...props}>
-      {props.children}
-    </a>
-  )
-}
+export default Button;
